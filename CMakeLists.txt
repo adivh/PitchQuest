@@ -27,20 +27,30 @@ option(PITCHQUEST_BUILD_TESTS "Build Pitch Quest tests" ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # -------------------------------------------------
 # Sources
 # -------------------------------------------------
+add_executable(PitchQuestClient
+    src/client/main.cpp
+)
+
 add_executable(PitchQuestServer
     src/server/main.cpp
 )
 
-# -------------------------------------------------
-# Includes
-# -------------------------------------------------
-target_include_directories(PitchQuestServer
-    PRIVATE include/pitchquest
-)
+if (MSVC)
+    target_compile_options(PitchQuestClient PRIVATE /W4 /permissive-)
+    target_compile_options(PitchQuestServer PRIVATE /W4 /permissive-)
+else()
+    target_compile_options(PitchQuestClient PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(PitchQuestServer PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+target_include_directories(PitchQuestClient PRIVATE include/pitchquest)
+
+target_include_directories(PitchQuestServer PRIVATE include/pitchquest)
 
 # -------------------------------------------------
 # Testing
