@@ -34,6 +34,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # -------------------------------------------------
 add_executable(PitchQuestClient
     src/client/main.cpp
+    src/client/alsaaudioplayer.cpp
 )
 
 add_executable(PitchQuestServer
@@ -44,13 +45,16 @@ if (MSVC)
     target_compile_options(PitchQuestClient PRIVATE /W4 /permissive-)
     target_compile_options(PitchQuestServer PRIVATE /W4 /permissive-)
 else()
-    target_compile_options(PitchQuestClient PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(PitchQuestClient PRIVATE -Wall -Wextra -Wpedantic -lasound)
     target_compile_options(PitchQuestServer PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 target_include_directories(PitchQuestClient PRIVATE include/pitchquest)
 
 target_include_directories(PitchQuestServer PRIVATE include/pitchquest)
+
+find_package(ALSA REQUIRED)
+target_link_libraries(PitchQuestClient PRIVATE ALSA::ALSA)
 
 # -------------------------------------------------
 # Testing
