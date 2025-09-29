@@ -1,5 +1,6 @@
 # Folders
 build/
+.cache/
 
 # CMake
 CMakeLists.txt.user
