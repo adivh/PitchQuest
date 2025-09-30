@@ -10,7 +10,7 @@ class AudioPlayer {
     public:
         virtual ~AudioPlayer() = default;
 
-        virtual void play(std::vector<Note> notes) const = 0;
+        virtual void play(std::vector<Note> notes) = 0;
 };
 
 }   // namespace PitchQuest
