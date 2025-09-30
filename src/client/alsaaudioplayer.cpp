@@ -1,4 +1,5 @@
 #include "alsaaudioplayer.hpp"
+#include "spdlog/spdlog.h"
 
 #include <cmath>
 #include <print>
@@ -25,9 +26,11 @@ AlsaAudioPlayer::~AlsaAudioPlayer() {
     m_running = false;
     m_cv.notify_all();
 
+    spdlog::debug("dtor queue size: {}", m_queue.size());
     if (m_worker.joinable()) {
         m_worker.join();
     }
+    spdlog::debug("dtor queue size: {}", m_queue.size());
 
     if (m_handle) {
         snd_pcm_drain(m_handle);
@@ -57,7 +60,9 @@ void AlsaAudioPlayer::worker_loop() {
             std::unique_lock<std::mutex> lock{m_mutex};
             m_cv.wait(lock, [this]() { return !m_queue.empty() || !m_running.load(); });
 
+            spdlog::debug("Queue size: {}", m_queue.size());
             if (!m_running && m_queue.empty()) {
+                spdlog::debug("About to break with queue size: {}", m_queue.size());
                 break;
             }
 
@@ -68,10 +73,10 @@ void AlsaAudioPlayer::worker_loop() {
         if (snd_pcm_state(m_handle) != SND_PCM_STATE_PREPARED) {
             int err {snd_pcm_prepare(m_handle)};
             if (err) {
-                std::print("Failed to enter prepared state: {}\n"
-                   "Current state: {}\n",
-                   snd_strerror(err),
-                   snd_pcm_state_to_string(snd_pcm_state(m_handle)));
+                spdlog::error("Failed to enter prepared state: {}\n"
+                    "Current state: {}\n",
+                    snd_strerror(err),
+                    snd_pcm_state_to_string(snd_pcm_state(m_handle)));
             }
         }
 

@@ -11,13 +11,13 @@ Pitch Quest - A multiplayer ear training game
 
 ```
 sudo apt update
-sudo apt install make cmake gcc-14
+sudo apt install make cmake gcc-14 libspdlog-dev
 ```
 
 #### Arch
 
 ```
-sudo pacman -S base-devel cmake
+sudo pacman -S base-devel cmake spdlog
 ```
 
 ### Building

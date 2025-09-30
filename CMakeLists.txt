@@ -50,11 +50,13 @@ else()
 endif()
 
 target_include_directories(PitchQuestClient PRIVATE include/pitchquest)
-
 target_include_directories(PitchQuestServer PRIVATE include/pitchquest)
 
 find_package(ALSA REQUIRED)
 target_link_libraries(PitchQuestClient PRIVATE ALSA::ALSA)
+
+find_package(spdlog REQUIRED)
+target_link_libraries(PitchQuestClient PRIVATE spdlog::spdlog)
 
 # -------------------------------------------------
 # Testing
