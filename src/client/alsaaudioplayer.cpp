@@ -26,11 +26,9 @@ AlsaAudioPlayer::~AlsaAudioPlayer() {
     m_running = false;
     m_cv.notify_all();
 
-    spdlog::debug("dtor queue size: {}", m_queue.size());
     if (m_worker.joinable()) {
         m_worker.join();
     }
-    spdlog::debug("dtor queue size: {}", m_queue.size());
 
     if (m_handle) {
         snd_pcm_drain(m_handle);
@@ -47,6 +45,10 @@ void AlsaAudioPlayer::play(std::vector<Note> notes) {
     m_cv.notify_one();
 }
 
+size_t AlsaAudioPlayer::queue_size() const {
+    return m_queue.size();
+}
+
 void AlsaAudioPlayer::worker_loop() {
 
     const size_t buffer_size = m_sample_rate / 100;  // 10ms
@@ -60,9 +62,7 @@ void AlsaAudioPlayer::worker_loop() {
             std::unique_lock<std::mutex> lock{m_mutex};
             m_cv.wait(lock, [this]() { return !m_queue.empty() || !m_running.load(); });
 
-            spdlog::debug("Queue size: {}", m_queue.size());
             if (!m_running && m_queue.empty()) {
-                spdlog::debug("About to break with queue size: {}", m_queue.size());
                 break;
             }
 

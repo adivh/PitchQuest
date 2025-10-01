@@ -67,11 +67,15 @@ if (PITCHQUEST_BUILD_TESTS)
     add_subdirectory(extern/googletest)
 
     add_executable(PitchQuestTests
+        src/client/alsaaudioplayer.cpp
         test/test_scale.cpp
+        test/test_alsaaudioplayer.cpp
     )
 
     target_link_libraries(PitchQuestTests
         gtest_main
+        ALSA::ALSA
+        spdlog::spdlog
     )
 
     target_include_directories(PitchQuestTests

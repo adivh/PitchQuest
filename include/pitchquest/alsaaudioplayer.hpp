@@ -18,6 +18,7 @@ class AlsaAudioPlayer final : public AudioPlayer {
         ~AlsaAudioPlayer() override;
 
         void play(std::vector<Note> notes) override;
+        size_t queue_size() const;
 
     private:
         void worker_loop();
