@@ -80,6 +80,7 @@ if (PITCHQUEST_BUILD_TESTS)
 
     target_include_directories(PitchQuestTests
         PRIVATE include/pitchquest
+        PRIVATE test/
     )
 
     include(GoogleTest)

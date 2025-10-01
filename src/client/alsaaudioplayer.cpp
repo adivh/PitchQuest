@@ -45,10 +45,6 @@ void AlsaAudioPlayer::play(std::vector<Note> notes) {
     m_cv.notify_one();
 }
 
-size_t AlsaAudioPlayer::queue_size() const {
-    return m_queue.size();
-}
-
 void AlsaAudioPlayer::worker_loop() {
 
     const size_t buffer_size = m_sample_rate / 100;  // 10ms
