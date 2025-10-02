@@ -3,6 +3,7 @@
 #include "alsaaudioplayer_testfriend.hpp"
 
 using namespace PitchQuest;
+using namespace PitchQuestTest;
 using namespace std::chrono_literals;
 
 const Note silent_short {Note{0.0, std::chrono::duration<double>(.1)}};

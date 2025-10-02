@@ -10,13 +10,17 @@
 #include <string_view>
 #include <thread>
 
-namespace PitchQuest {
+namespace PitchQuestTest {
 
 class AlsaAudioPlayer_TestFriend;
 
+}   // namespace PitchQuestTest
+
+namespace PitchQuest {
+
 class AlsaAudioPlayer final : public AudioPlayer {
 
-    friend class AlsaAudioPlayer_TestFriend;
+    friend class PitchQuestTest::AlsaAudioPlayer_TestFriend;
 
     public:
         AlsaAudioPlayer();
