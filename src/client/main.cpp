@@ -1,11 +1,8 @@
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-
 #include <memory>
 #include <print>
 
 #include "alsaaudioplayer.hpp"
+#include "client.hpp"
 #include "logger.hpp"
 #include "scale.hpp"
 
@@ -35,9 +32,16 @@ void test_alsa(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 
-    setup_logger();
+    PitchQuest::setup_logger();
 
     test_alsa(argc, argv);
+
+    Client client {};
+    client.send("Hello from client!", 19);
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
+    client.send("Good bye!", 9);
 
     return 0;
 }

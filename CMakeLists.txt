@@ -34,6 +34,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # -------------------------------------------------
 add_executable(PitchQuestClient
     src/client/alsaaudioplayer.cpp
+    src/client/client.cpp
     src/client/main.cpp
     src/common/logger.cpp
 )
@@ -41,6 +42,7 @@ add_executable(PitchQuestClient
 add_executable(PitchQuestServer
     src/common/logger.cpp
     src/server/main.cpp
+    src/server/server.cpp
 )
 
 if (MSVC)
