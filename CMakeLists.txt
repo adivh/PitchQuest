@@ -33,11 +33,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Sources
 # -------------------------------------------------
 add_executable(PitchQuestClient
-    src/client/main.cpp
     src/client/alsaaudioplayer.cpp
+    src/client/main.cpp
+    src/common/logger.cpp
 )
 
 add_executable(PitchQuestServer
+    src/common/logger.cpp
     src/server/main.cpp
 )
 
@@ -57,6 +59,7 @@ target_link_libraries(PitchQuestClient PRIVATE ALSA::ALSA)
 
 find_package(spdlog REQUIRED)
 target_link_libraries(PitchQuestClient PRIVATE spdlog::spdlog)
+target_link_libraries(PitchQuestServer PRIVATE spdlog::spdlog)
 
 # -------------------------------------------------
 # Testing
