@@ -23,7 +23,7 @@ Configurable logging to console and log file using [spdlog](https://github.com/g
 
 ```
 sudo apt update
-sudo apt install make cmake libspdlog-dev
+sudo apt install build-essential cmake libspdlog-dev
 ```
 
 #### Arch Linux
