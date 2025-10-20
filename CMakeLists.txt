@@ -73,8 +73,9 @@ if (PITCHQUEST_BUILD_TESTS)
 
     add_executable(PitchQuestTests
         src/client/alsaaudioplayer.cpp
-        test/test_scale.cpp
         test/test_alsaaudioplayer.cpp
+        test/test_ringbuffer.cpp
+        test/test_scale.cpp
     )
 
     target_link_libraries(PitchQuestTests
