@@ -1,8 +1,9 @@
 #include "alsaaudioplayer.hpp"
-#include "spdlog/spdlog.h"
 
 #include <cmath>
 #include <print>
+
+#include "logger.hpp"
 
 namespace PitchQuest {
 
@@ -69,7 +70,7 @@ void AlsaAudioPlayer::worker_loop() {
         if (snd_pcm_state(m_handle) != SND_PCM_STATE_PREPARED) {
             int err {snd_pcm_prepare(m_handle)};
             if (err) {
-                spdlog::error("Failed to enter prepared state: {}\n"
+                log_error("Failed to enter prepared state: {}\n"
                     "Current state: {}\n",
                     snd_strerror(err),
                     snd_pcm_state_to_string(snd_pcm_state(m_handle)));

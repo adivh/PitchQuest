@@ -11,7 +11,7 @@ Client::Client() : m_server_address{AF_INET, 8080, in_addr{INADDR_ANY}, 0} {
     m_client_socket = socket(AF_INET, SOCK_STREAM, 0);
     int err = connect(m_client_socket, (struct sockaddr*) &m_server_address, sizeof(m_server_address));
     if (err) {
-        spdlog::debug("Error connecting to server: {}", strerror(errno));
+        log_debug("Error connecting to server: {}", strerror(errno));
     }
 }
 

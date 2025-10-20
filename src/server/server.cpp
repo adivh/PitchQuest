@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "spdlog/spdlog.h"
+#include "logger.hpp"
 
 namespace PitchQuest {
 
@@ -16,7 +16,7 @@ Server::Server() : m_running{true}, m_server_address{AF_INET, 8080, {INADDR_ANY}
 
     if (err) {
         m_running = false;
-        spdlog::error("Binding failed: {}", strerror(errno));
+        log_error("Binding failed: {}", strerror(errno));
     } else {
         m_worker = std::thread(&Server::recv_loop, this);
     }
@@ -38,14 +38,14 @@ void Server::recv_loop() {
     int err = listen(m_server_socket, 1);
 
     if (err) {
-        spdlog::debug("Error listening: {}", strerror(errno));
+        log_debug("Error listening: {}", strerror(errno));
         return;
     }
 
     sockaddr client_address {};
     socklen_t client_address_len {sizeof(client_address)};
     int fd_client = accept(m_server_socket, (struct sockaddr*) &client_address, &client_address_len);
-    spdlog::info("Connection accepted");
+    log_info("Connection accepted");
 
     pollfd pfds {fd_client, POLLIN, 0};
     std::array<char, 1024> buffer {};
@@ -55,7 +55,7 @@ void Server::recv_loop() {
         int ready = poll(&pfds, static_cast<nfds_t>(1), 2'000); 
 
         if (ready < 0) {
-            spdlog::debug("Polling failed: {}", strerror(errno));
+            log_debug("Polling failed: {}", strerror(errno));
             continue;
         } 
 
@@ -69,21 +69,21 @@ void Server::recv_loop() {
 
             if (bytes > 0) {
                 buffer.at(bytes) = '\0';
-                spdlog::info("Received message: {}", buffer.data());
+                log_info("Received message: {}", buffer.data());
             } else if (bytes == 0) {
-                spdlog::info("Client closed connection");
+                log_info("Client closed connection");
                 break;
             } else {
-                spdlog::warn("recv() error: {}", strerror(errno));
+                log_warn("recv() error: {}", strerror(errno));
                 break;
             }
         } else if (pfds.revents & POLLHUP) {
             m_running = false;
-            spdlog::info("Connection closed");
+            log_info("Connection closed");
             break;
         } else if (pfds.revents & (POLLERR | POLLNVAL)) {
             m_running = false;
-            spdlog::info("Socket error or invalid fd");
+            log_info("Socket error or invalid fd");
             break;
         }
     }
