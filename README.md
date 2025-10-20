@@ -23,7 +23,7 @@ Configurable logging to console and log file using [spdlog](https://github.com/g
 
 ```
 sudo apt update
-sudo apt install make cmake gcc-14 libspdlog-dev
+sudo apt install make cmake libspdlog-dev
 ```
 
 #### Arch Linux
@@ -41,7 +41,7 @@ git clone --recurse-submodules https://github.com/adivh/PitchQuest.git
 mkdir PitchQuest/build
 cd PitchQuest/build
 
-cmake -DCMAKE_CXX_Compiler=g++-14 ..
+cmake ..
 make -j`nproc`
 ```
 
