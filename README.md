@@ -3,6 +3,18 @@ Pitch Quest - A multiplayer ear training cli game
 
 ## Features
 
+### Networking
+
+Simple client/server
+
+### Audio
+
+Async audio player for Linux/Alsa.
+
+### Logging
+
+Configurable logging to console and log file using [spdlog](https://github.com/gabime/spdlog/) under the hood.
+
 ## Installation
 
 ### Prerequisits
