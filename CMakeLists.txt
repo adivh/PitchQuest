@@ -20,6 +20,7 @@ project(PitchQuest
 # Options
 # -------------------------------------------------
 option(PITCHQUEST_BUILD_TESTS "Build Pitch Quest tests" ON)
+option(PITCHQUEST_ENABLE_AUDIO_TESTS "Enable tests that require audio" ON)
 
 # -------------------------------------------------
 # Compiler settings
@@ -71,12 +72,26 @@ if (PITCHQUEST_BUILD_TESTS)
 
     add_subdirectory(extern/googletest)
 
-    add_executable(PitchQuestTests
-        src/client/alsaaudioplayer.cpp
-        test/test_alsaaudioplayer.cpp
+    # Collect test sources
+    set(PITCHQUEST_TEST_SOURCES
         test/test_ringbuffer.cpp
         test/test_scale.cpp
     )
+
+    if(PITCHQUEST_ENABLE_AUDIO_TESTS)
+        list(APPEND PITCHQUEST_TEST_SOURCES
+            src/client/alsaaudioplayer.cpp
+            test/test_alsaaudioplayer.cpp
+        )
+        message(STATUS "Audio tests enabled.")
+    else()
+        message(STATUS "Audio tests disabled.")
+    endif()
+
+    add_executable(PitchQuestTests
+        ${PITCHQUEST_TEST_SOURCES}
+    )
+
 
     target_link_libraries(PitchQuestTests
         gtest_main
