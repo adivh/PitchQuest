@@ -1,7 +1,9 @@
+![Build and Tests](https://github.com/adivh/PitchQuest/actions/workflows/cmake-single-platform.yml/badge.svg)
+
 # PitchQuest
 Pitch Quest - A multiplayer ear training cli game
 
-## Features
+## Implemented Features
 
 ### Networking
 
