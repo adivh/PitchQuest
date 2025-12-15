@@ -45,7 +45,10 @@ void Server::recv_loop() {
     sockaddr client_address {};
     socklen_t client_address_len {sizeof(client_address)};
     int fd_client = accept(m_server_socket, (struct sockaddr*) &client_address, &client_address_len);
-    log_info("Connection accepted");
+
+    if (m_running) {
+        log_info("Connection accepted");
+    }
 
     pollfd pfds {fd_client, POLLIN, 0};
     std::array<char, 1024> buffer {};
