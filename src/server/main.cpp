@@ -8,11 +8,7 @@ int main() {
     PitchQuest::setup_logger();
 
     PitchQuest::Server server {};
-
-    std::string s {};
-    while (s != "exit") {
-        std::getline(std::cin, s);
-    }
+    server.wait();
 
     return 0;
 }

@@ -23,7 +23,10 @@ Server::Server() : m_running{true}, m_server_address{AF_INET, 8080, {INADDR_ANY}
 }
 
 Server::~Server() {
-    m_running = false;
+    {
+        std::lock_guard lock{m_mutex};
+        m_running = false;
+    }
     shutdown(m_server_socket, SHUT_RDWR);
 
     if (m_worker.joinable()) {
@@ -75,23 +78,47 @@ void Server::recv_loop() {
                 log_info("Received message: {}", buffer.data());
             } else if (bytes == 0) {
                 log_info("Client closed connection");
-                break;
+                {
+                    std::lock_guard lock{m_mutex};
+                    m_running = false;
+                }
             } else {
                 log_warn("recv() error: {}", strerror(errno));
+                {
+                    std::lock_guard lock{m_mutex};
+                    m_running = false;
+                }
                 break;
             }
         } else if (pfds.revents & POLLHUP) {
-            m_running = false;
+            {
+                std::lock_guard lock{m_mutex};
+                m_running = false;
+            }
             log_info("Connection closed");
             break;
         } else if (pfds.revents & (POLLERR | POLLNVAL)) {
-            m_running = false;
+            {
+                std::lock_guard lock{m_mutex};
+                m_running = false;
+            }
             log_info("Socket error or invalid fd");
             break;
         }
     }
 
     close(fd_client);
+    m_stopped_cv.notify_all();
+}
+
+void Server::stop() {
+    std::lock_guard lock{m_mutex};
+    m_running = false;
+}
+
+void Server::wait() {
+    std::unique_lock lock{m_mutex};
+    m_stopped_cv.wait(lock, [this] { return !m_running; });
 }
 
 }   // namespace PitchQuest
