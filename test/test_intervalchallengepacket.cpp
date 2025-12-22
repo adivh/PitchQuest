@@ -50,3 +50,8 @@ TEST(IntervalChallengePacketTest, to_bytesData4valCTOR) {
     EXPECT_EQ(p2.to_bytes().data()[1], 0x33);
     EXPECT_EQ(p2.to_bytes().data()[2], 0xa3);
 }
+
+TEST(IntervalChallengePacketTest, to_string) {
+    IntervalChallengePacket packet {1, 4, 10, 4};
+    EXPECT_EQ(packet.to_string(), std::string("type: ") + std::to_string(IntervalChallengePacket::packet_type) + ", note1: 1, octave1: 4, note2: 10, octave2: 4");
+}

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <stdint.h>
 #include <array>
+#include <format>
+#include <stdint.h>
 
 namespace PitchQuest {
 
@@ -21,6 +22,15 @@ struct IntervalChallengePacket {
             static_cast<uint8_t>((note1 << 4) | octave1),
             static_cast<uint8_t>((note2 << 4) | octave2)
         };
+    }
+
+    constexpr std::string to_string() const {
+        return std::format("type: {}, note1: {}, octave1: {}, note2: {}, octave2: {}",
+                            IntervalChallengePacket::packet_type,
+                            note1,
+                            octave1,
+                            note2,
+                            octave2);
     }
 };
 
