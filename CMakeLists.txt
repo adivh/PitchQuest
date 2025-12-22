@@ -96,16 +96,15 @@ if (PITCHQUEST_BUILD_TESTS)
         ${PITCHQUEST_TEST_SOURCES}
     )
 
+    target_include_directories(PitchQuestTests
+        PRIVATE include/pitchquest
+        PRIVATE test
+    )
 
     target_link_libraries(PitchQuestTests
         gtest_main
         ALSA::ALSA
         spdlog::spdlog
-    )
-
-    target_include_directories(PitchQuestTests
-        PRIVATE include/pitchquest
-        PRIVATE test/
     )
 
     include(GoogleTest)
