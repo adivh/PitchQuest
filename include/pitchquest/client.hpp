@@ -1,6 +1,9 @@
 #pragma once
 
+#include <atomic>
+#include <condition_variable>
 #include <netinet/in.h>
+#include <thread>
 
 namespace PitchQuest {
 
@@ -10,9 +13,18 @@ class Client {
         ~Client();
 
         void send(const char* msg, size_t len);
+        void stop();
+        void wait();
+
     private:
-       int m_client_socket;
-       sockaddr_in m_server_address;
+        void recv_loop();
+
+        std::thread m_worker;
+        std::atomic<bool> m_running;
+        std::mutex m_mutex;
+        std::condition_variable m_stopped_cv;
+        int m_client_socket;
+        sockaddr_in m_server_address;
 };
 
 }   // namespace PitchQuest

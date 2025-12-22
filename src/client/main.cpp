@@ -40,7 +40,10 @@ int main(int argc, char* argv[]) {
 
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
+    client.send("Hello again from client!", 24);
     client.send("Good bye!", 9);
 
+    client.stop();
+    client.wait();
     return 0;
 }
