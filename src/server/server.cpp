@@ -26,10 +26,7 @@ Server::Server()
 }
 
 Server::~Server() {
-    {
-        std::lock_guard lock{m_mutex};
-        m_running = false;
-    }
+    stop();
     shutdown(m_server_socket, SHUT_RDWR);
 
     if (m_worker.joinable()) {
@@ -41,7 +38,8 @@ Server::~Server() {
 
 void Server::broadcast(IntervalChallengePacket packet) const {
     if (m_client_socket) {
-        log_info("type: {}, note1: {}, octave1: {}, note2: {}, octave2: {}", IntervalChallengePacket::packet_type, packet.note1, packet.octave1, packet.note2, packet.octave2);
+        log_info("Sending IntervalChallengePacket to client");
+        log_info("{}", packet.to_string());
         ::send(m_client_socket, packet.to_bytes().data(), packet.to_bytes().size(), 0);
     } else {
         log_info("no client connected");
@@ -100,30 +98,19 @@ void Server::recv_loop() {
                 log_info("Received message: {}", buffer.data());
             } else if (bytes == 0) {
                 log_info("Client closed connection");
-                {
-                    std::lock_guard lock{m_mutex};
-                    m_running = false;
-                }
+                stop();
+                break;
             } else {
                 log_warn("recv() error: {}", strerror(errno));
-                {
-                    std::lock_guard lock{m_mutex};
-                    m_running = false;
-                }
+                stop();
                 break;
             }
         } else if (pfds.revents & POLLHUP) {
-            {
-                std::lock_guard lock{m_mutex};
-                m_running = false;
-            }
+            stop();
             log_info("Connection closed");
             break;
         } else if (pfds.revents & (POLLERR | POLLNVAL)) {
-            {
-                std::lock_guard lock{m_mutex};
-                m_running = false;
-            }
+            stop();
             log_info("Socket error or invalid fd");
             break;
         }
