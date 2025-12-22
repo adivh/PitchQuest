@@ -6,6 +6,8 @@
 #include <netinet/in.h>
 #include <thread>
 
+#include "intervalchallengepacket.hpp"
+
 namespace PitchQuest {
 
 class Server {
@@ -13,7 +15,8 @@ class Server {
         Server();
         ~Server();
 
-        bool running() { return m_running.load(); }
+        void broadcast(IntervalChallengePacket packet) const;
+        bool running() const { return m_running.load(); }
         void stop();
         void wait();
 

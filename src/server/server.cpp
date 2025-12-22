@@ -9,8 +9,11 @@
 
 namespace PitchQuest {
 
-Server::Server() : m_running{true}, m_server_address{AF_INET, 8080, {INADDR_ANY}, 0} {
-
+Server::Server()
+    :   m_running{true},
+        m_server_socket{0},
+        m_server_address{AF_INET, 8080, {INADDR_ANY}, 0},
+        m_client_socket{0} {
     m_server_socket = socket(AF_INET, SOCK_STREAM, 0);
     int err = bind(m_server_socket, (struct sockaddr*) &m_server_address, sizeof(m_server_address));
 
@@ -36,6 +39,25 @@ Server::~Server() {
     close(m_server_socket);
 }
 
+void Server::broadcast(IntervalChallengePacket packet) const {
+    if (m_client_socket) {
+        log_info("type: {}, note1: {}, octave1: {}, note2: {}, octave2: {}", IntervalChallengePacket::packet_type, packet.note1, packet.octave1, packet.note2, packet.octave2);
+        ::send(m_client_socket, packet.to_bytes().data(), packet.to_bytes().size(), 0);
+    } else {
+        log_info("no client connected");
+    }
+}
+
+void Server::stop() {
+    std::lock_guard lock{m_mutex};
+    m_running = false;
+}
+
+void Server::wait() {
+    std::unique_lock lock{m_mutex};
+    m_stopped_cv.wait(lock, [this] { return !m_running; });
+}
+
 void Server::recv_loop() {
     
     int err = listen(m_server_socket, 1);
@@ -47,13 +69,13 @@ void Server::recv_loop() {
 
     sockaddr client_address {};
     socklen_t client_address_len {sizeof(client_address)};
-    int fd_client = accept(m_server_socket, (struct sockaddr*) &client_address, &client_address_len);
+    m_client_socket = accept(m_server_socket, (struct sockaddr*) &client_address, &client_address_len);
 
     if (m_running) {
         log_info("Connection accepted");
     }
 
-    pollfd pfds {fd_client, POLLIN, 0};
+    pollfd pfds {m_client_socket, POLLIN, 0};
     std::array<char, 1024> buffer {};
 
     while (m_running) {
@@ -71,7 +93,7 @@ void Server::recv_loop() {
 
         if (pfds.revents & POLLIN) {
 
-            ssize_t bytes = recv(fd_client, buffer.data(), buffer.size() - 1, 0);
+            ssize_t bytes = recv(m_client_socket, buffer.data(), buffer.size() - 1, 0);
 
             if (bytes > 0) {
                 buffer.at(bytes) = '\0';
@@ -107,18 +129,8 @@ void Server::recv_loop() {
         }
     }
 
-    close(fd_client);
+    close(m_client_socket);
     m_stopped_cv.notify_all();
-}
-
-void Server::stop() {
-    std::lock_guard lock{m_mutex};
-    m_running = false;
-}
-
-void Server::wait() {
-    std::unique_lock lock{m_mutex};
-    m_stopped_cv.wait(lock, [this] { return !m_running; });
 }
 
 }   // namespace PitchQuest
