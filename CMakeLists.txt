@@ -37,12 +37,10 @@ add_executable(PitchQuestClient
     src/client/alsaaudioplayer.cpp
     src/client/client.cpp
     src/client/main.cpp
-    src/common/intervalchallengepacket.cpp
     src/common/logger.cpp
 )
 
 add_executable(PitchQuestServer
-    src/common/intervalchallengepacket.cpp
     src/common/logger.cpp
     src/server/main.cpp
     src/server/server.cpp
@@ -76,7 +74,6 @@ if (PITCHQUEST_BUILD_TESTS)
 
     # Collect test sources
     set(PITCHQUEST_TEST_SOURCES
-        src/common/intervalchallengepacket.cpp
         test/test_intervalchallengepacket.cpp
         test/test_intervalchallengeresponsepacket.cpp
         test/test_ringbuffer.cpp
