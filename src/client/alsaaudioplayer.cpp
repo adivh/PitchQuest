@@ -24,7 +24,7 @@ AlsaAudioPlayer::AlsaAudioPlayer()
 
 AlsaAudioPlayer::~AlsaAudioPlayer() {
     m_running = false;
-    m_cv.notify_all();
+    m_cv_notify_worker.notify_all();
 
     if (m_worker.joinable()) {
         m_worker.join();
@@ -42,7 +42,12 @@ void AlsaAudioPlayer::play(std::vector<Note> notes) {
         std::unique_lock<std::mutex> lock{m_mutex};
         m_queue.push(std::move(notes));
     }
-    m_cv.notify_one();
+    m_cv_notify_worker.notify_one();
+}
+
+void AlsaAudioPlayer::wait_for_idle() {
+    std::unique_lock<std::mutex> lock{m_mutex};
+    m_cv_notify_idle.wait(lock, [this]() { return m_queue.empty(); });
 }
 
 void AlsaAudioPlayer::worker_loop() {
@@ -56,7 +61,7 @@ void AlsaAudioPlayer::worker_loop() {
 
         {
             std::unique_lock<std::mutex> lock{m_mutex};
-            m_cv.wait(lock, [this]() { return !m_queue.empty() || !m_running.load(); });
+            m_cv_notify_worker.wait(lock, [this]() { return !m_queue.empty() || !m_running.load(); });
 
             if (!m_running && m_queue.empty()) {
                 break;
@@ -87,6 +92,7 @@ void AlsaAudioPlayer::worker_loop() {
             }
         }
         snd_pcm_drain(m_handle);
+        m_cv_notify_idle.notify_all();
     }
 }
 

@@ -27,6 +27,7 @@ class AlsaAudioPlayer final : public AudioPlayer {
         ~AlsaAudioPlayer() override;
 
         void play(std::vector<Note> notes) override;
+        void wait_for_idle() override;
 
     private:
         void worker_loop();
@@ -42,7 +43,8 @@ class AlsaAudioPlayer final : public AudioPlayer {
         std::thread m_worker;
         std::atomic<bool> m_running;
         std::mutex m_mutex;
-        std::condition_variable m_cv;
+        std::condition_variable m_cv_notify_worker;
+        std::condition_variable m_cv_notify_idle;
     };
 
 }   // namespace PitchQuest

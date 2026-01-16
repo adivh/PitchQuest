@@ -43,12 +43,14 @@ int main(int argc, char* argv[]) {
     Client client {handler};
     client.send("Hello from client!", 19);
 
-    std::this_thread::sleep_for(std::chrono::seconds(25));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
     client.send("Hello again from client!", 24);
     client.send("Good bye!", 9);
 
     client.stop();
     client.wait();
+
+    player.wait_for_idle();
     return 0;
 }
