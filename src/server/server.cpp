@@ -37,12 +37,12 @@ Server::~Server() {
 }
 
 void Server::broadcast(IntervalChallengePacket packet) const {
+    log_debug("Sending IntervalChallengePacket to client");
     if (m_client_socket) {
-        log_info("Sending IntervalChallengePacket to client");
-        log_info("{}", packet.to_string());
+        log_debug("{}", packet.to_string());
         ::send(m_client_socket, packet.to_bytes().data(), packet.to_bytes().size(), 0);
     } else {
-        log_info("no client connected");
+        log_debug("no client connected");
     }
 }
 
@@ -70,7 +70,7 @@ void Server::recv_loop() {
     m_client_socket = accept(m_server_socket, (struct sockaddr*) &client_address, &client_address_len);
 
     if (m_running) {
-        log_info("Connection accepted");
+        log_debug("Connection accepted");
     }
 
     pollfd pfds {m_client_socket, POLLIN, 0};
@@ -95,9 +95,9 @@ void Server::recv_loop() {
 
             if (bytes > 0) {
                 buffer.at(bytes) = '\0';
-                log_info("Received message: {}", buffer.data());
+                log_debug("Received message: {}", buffer.data());
             } else if (bytes == 0) {
-                log_info("Client closed connection");
+                log_debug("Client closed connection");
                 stop();
                 break;
             } else {
@@ -107,11 +107,11 @@ void Server::recv_loop() {
             }
         } else if (pfds.revents & POLLHUP) {
             stop();
-            log_info("Connection closed");
+            log_debug("Connection closed");
             break;
         } else if (pfds.revents & (POLLERR | POLLNVAL)) {
             stop();
-            log_info("Socket error or invalid fd");
+            log_warn("Socket error or invalid fd");
             break;
         }
     }

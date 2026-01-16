@@ -69,7 +69,7 @@ void Client::recv_loop() {
             ssize_t bytes = recv(m_client_socket, buffer.data(), buffer.size() - 1, 0);
 
             if (bytes > 0) {
-                log_info("Received {} bytes", bytes);
+                log_debug("Received {} bytes", bytes);
                 if (buffer.at(0) == IntervalChallengePacket::packet_type) {
                     m_handler.on_interval_challenge(IntervalChallengePacket {buffer.at(1), buffer.at(2)});
                 }
