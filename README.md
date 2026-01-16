@@ -7,8 +7,8 @@ Pitch Quest - A multiplayer ear training cli game
 
 ### Networking
 
-Simple client/server
-Server can send Interval Challenges
+Simple client/server  
+Server can send Interval Challenges  
 Client plays sounds based on received Interval Challenge
 
 ### Audio
