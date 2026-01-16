@@ -10,10 +10,11 @@
 
 namespace PitchQuest {
 
-Client::Client()
+Client::Client(PacketHandler& handler)
     :   m_running{true},
         m_client_socket{0},
-        m_server_address{AF_INET, 8080, in_addr{INADDR_ANY}, 0} {
+        m_server_address{AF_INET, 8080, in_addr{INADDR_ANY}, 0},
+        m_handler{handler} {
     m_client_socket = socket(AF_INET, SOCK_STREAM, 0);
     int err = connect(m_client_socket, (struct sockaddr*) &m_server_address, sizeof(m_server_address));
     if (err) {
@@ -70,8 +71,7 @@ void Client::recv_loop() {
             if (bytes > 0) {
                 log_info("Received {} bytes", bytes);
                 if (buffer.at(0) == IntervalChallengePacket::packet_type) {
-                    IntervalChallengePacket packet {buffer.at(1), buffer.at(2)};
-                    log_info("{}", packet.to_string());
+                    m_handler.on_interval_challenge(IntervalChallengePacket {buffer.at(1), buffer.at(2)});
                 }
             } else if (bytes == 0) {
                 log_info("Server closed connection");

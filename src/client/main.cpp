@@ -2,12 +2,17 @@
 
 #include "alsaaudioplayer.hpp"
 #include "client.hpp"
+#include "clientpackethandler.hpp"
 #include "logger.hpp"
 #include "scale.hpp"
 
 using namespace PitchQuest;
 
 void test_alsa(int argc, char* argv[]) {
+
+    if (argc != 2) {
+        return;
+    }
 
     std::unique_ptr<AudioPlayer> player {std::make_unique<AlsaAudioPlayer>()};
     std::vector<Note> sequence {
@@ -24,9 +29,7 @@ void test_alsa(int argc, char* argv[]) {
 //
 //  sleep ends between sequences -> playing sequence is finished, rest gets ignored and worker finishes loop.
 
-    if (argc == 2) {
-        std::this_thread::sleep_for(std::chrono::seconds(atoi(argv[1])));
-    }
+    std::this_thread::sleep_for(std::chrono::seconds(atoi(argv[1])));
 }
 
 int main(int argc, char* argv[]) {
@@ -35,10 +38,12 @@ int main(int argc, char* argv[]) {
 
     test_alsa(argc, argv);
 
-    Client client {};
+    AlsaAudioPlayer player;
+    ClientPacketHandler handler{player};
+    Client client {handler};
     client.send("Hello from client!", 19);
 
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::this_thread::sleep_for(std::chrono::seconds(25));
 
     client.send("Hello again from client!", 24);
     client.send("Good bye!", 9);

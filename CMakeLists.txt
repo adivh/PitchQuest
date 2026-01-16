@@ -36,6 +36,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(PitchQuestClient
     src/client/alsaaudioplayer.cpp
     src/client/client.cpp
+    src/client/clientpackethandler.cpp
     src/client/main.cpp
     src/common/logger.cpp
 )

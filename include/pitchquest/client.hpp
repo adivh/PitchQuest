@@ -5,11 +5,13 @@
 #include <netinet/in.h>
 #include <thread>
 
+#include "packethandler.hpp"
+
 namespace PitchQuest {
 
 class Client {
     public:
-        Client();
+        explicit Client(PacketHandler& handler);
         ~Client();
 
         void send(const char* msg, size_t len);
@@ -25,6 +27,7 @@ class Client {
         std::condition_variable m_stopped_cv;
         int m_client_socket;
         sockaddr_in m_server_address;
+        PacketHandler& m_handler;
 };
 
 }   // namespace PitchQuest
