@@ -80,6 +80,7 @@ if (PITCHQUEST_BUILD_TESTS)
         test/test_ringbuffer.cpp
         test/test_sanitize.cpp
         test/test_scale.cpp
+        test/test_tokenize.cpp
     )
 
     if(PITCHQUEST_ENABLE_AUDIO_TESTS)
