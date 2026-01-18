@@ -78,6 +78,7 @@ if (PITCHQUEST_BUILD_TESTS)
         test/test_intervalchallengepacket.cpp
         test/test_intervalchallengeresponsepacket.cpp
         test/test_ringbuffer.cpp
+        test/test_sanitize.cpp
         test/test_scale.cpp
     )
 
