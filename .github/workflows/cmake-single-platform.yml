@@ -4,8 +4,18 @@ name: Build and Test (Linux)
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'CMakeLists.txt'
+      - 'include/**'
+      - 'src/**'
+      - 'test/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'CMakeLists.txt'
+      - 'include/**'
+      - 'src/**'
+      - 'test/**'
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
