@@ -1,6 +1,8 @@
 #ifndef PITCHQUESTTEST_ALSAAUDIOPLAYER_TESTFRIEND_HPP_
 #define PITCHQUESTTEST_ALSAAUDIOPLAYER_TESTFRIEND_HPP_
 
+#include <mutex>
+
 #include "alsaaudioplayer.hpp"
 
 namespace PitchQuestTest {
