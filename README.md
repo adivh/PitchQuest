@@ -5,7 +5,7 @@ Pitch Quest - A multiplayer ear training cli game
 
 ## Implemented Features
 
-### Networking
+### Networking (rework pending)
 
 Simple client/server  
 Server can send Interval Challenges  
@@ -13,7 +13,12 @@ Client plays sounds based on received Interval Challenge
 
 ### Audio
 
-Async audio player for Linux/Alsa
+Async audio player for Linux/Alsa  
+Integration with Windows is planned
+
+### CLI
+
+coming soon..
 
 ### Logging
 
