@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_ALSAAUDIOPLAYER_HPP_
+#define PITCHQUEST_ALSAAUDIOPLAYER_HPP_
 
 #include "audioplayer.hpp"
 
@@ -48,3 +49,5 @@ class AlsaAudioPlayer final : public AudioPlayer {
     };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_ALSAAUDIOPLAYER_HPP_

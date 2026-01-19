@@ -1,3 +1,6 @@
+#ifndef PITCHQUESTTEST_ALSAAUDIOPLAYER_TESTFRIEND_HPP_
+#define PITCHQUESTTEST_ALSAAUDIOPLAYER_TESTFRIEND_HPP_
+
 #include "alsaaudioplayer.hpp"
 
 namespace PitchQuestTest {
@@ -14,3 +17,5 @@ class AlsaAudioPlayer_TestFriend {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUESTTEST_ALSAAUDIOPLAYER_TESTFRIEND_HPP_

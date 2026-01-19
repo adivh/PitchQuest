@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_CLI_HPP_
+#define PITCHQUEST_CLI_HPP_
 
 #include <algorithm>
 #include <cctype>
@@ -50,3 +51,5 @@ namespace PitchQuest::cli {
     }
     
 }   // namespace PitchQuest::cli
+
+#endif  // PITCHQUEST_CLI_HPP_

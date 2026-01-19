@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_CLIENTPACKETHANDLER_HPP_
+#define PITCHQUEST_CLIENTPACKETHANDLER_HPP_
 
 #include "audioplayer.hpp"
 #include "packethandler.hpp"
@@ -16,3 +17,5 @@ class ClientPacketHandler : public PacketHandler {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLIENTPACKETHANDLER_HPP_

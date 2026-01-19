@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_CLIENT_HPP_
+#define PITCHQUEST_CLIENT_HPP_
 
 #include <atomic>
 #include <condition_variable>
@@ -31,3 +32,5 @@ class Client {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLIENT_HPP_

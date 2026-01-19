@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_SERVER_HPP_
+#define PITCHQUEST_SERVER_HPP_
 
 #include <atomic>
 #include <condition_variable>
@@ -33,3 +34,5 @@ class Server {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLI_HPP_

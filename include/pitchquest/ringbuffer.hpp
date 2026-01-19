@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_RINGBUFFER_HPP_
+#define PITCHQUEST_RINGBUFFER_HPP_
 
 #include <format>
 #include <vector>
@@ -77,3 +78,5 @@ class RingBuffer {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLI_HPP_

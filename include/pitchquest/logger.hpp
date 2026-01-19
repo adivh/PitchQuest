@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_LOGGER_HPP_
+#define PITCHQUEST_LOGGER_HPP_
 
 #include "spdlog/spdlog.h"
 
@@ -37,3 +38,5 @@ namespace PitchQuest {
     }
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLI_HPP_

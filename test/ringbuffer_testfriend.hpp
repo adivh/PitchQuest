@@ -1,3 +1,6 @@
+#ifndef PITCHQUESTTEST_RINGBUFFER_TESTFRIEND_HPP_
+#define PITCHQUESTTEST_RINGBUFFER_TESTFRIEND_HPP_
+
 #include "ringbuffer.hpp"
 
 namespace PitchQuestTest {
@@ -29,3 +32,5 @@ class RingBuffer_TestFriend {
 };
 
 }   // namespace PitchQuestTest
+
+#endif  // PITCHQUESTTEST_RINGBUFFER_TESTFRIEND_HPP_

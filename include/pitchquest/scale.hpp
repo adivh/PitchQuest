@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_SCALE_HPP_
+#define PITCHQUEST_SCALE_HPP_
 
 #include <cmath>
 
@@ -13,3 +14,5 @@ constexpr double heptatonic(int note, int octave) noexcept {
 }   // namespace Scale
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLI_HPP_

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_INTERVALCHALLENGEPACKET_HPP_
+#define PITCHQUEST_INTERVALCHALLENGEPACKET_HPP_
 
 #include <array>
 #include <format>
@@ -46,3 +47,5 @@ struct IntervalChallengePacket {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLI_HPP_

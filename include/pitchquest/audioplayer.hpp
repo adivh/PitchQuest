@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_AUDIOPLAYER_HPP_
+#define PITCHQUEST_AUDIOPLAYER_HPP_
 
 #include <vector>
 
@@ -15,3 +16,5 @@ class AudioPlayer {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_AUDIOPLAYER_HPP_

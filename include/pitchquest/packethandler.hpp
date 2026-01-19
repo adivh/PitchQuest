@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_PACKETHANDLER_HPP_
+#define PITCHQUEST_PACKETHANDLER_HPP_
 
 #include "intervalchallengepacket.hpp"
 
@@ -12,3 +13,5 @@ class PacketHandler {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLI_HPP_

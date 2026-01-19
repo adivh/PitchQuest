@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PITCHQUEST_NOTE_HPP_
+#define PITCHQUEST_NOTE_HPP_
 
 #include <chrono>
 
@@ -21,3 +22,5 @@ class Note {
 };
 
 }   // namespace PitchQuest
+
+#endif  // PITCHQUEST_CLI_HPP_
