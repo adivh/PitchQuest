@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cctype>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace PitchQuest::cli {
@@ -26,8 +27,8 @@ namespace PitchQuest::cli {
         return s;
     }
 
-    inline std::vector<std::string> tokenize(std::string_view command) {
-        std::vector<std::string> tokens {};
+    inline std::vector<std::string_view> tokenize_view(std::string_view command) {
+        std::vector<std::string_view> tokens {};
         tokens.reserve(heuristic_command_token_count);
 
         size_t index_start {};
@@ -50,6 +51,16 @@ namespace PitchQuest::cli {
         return tokens;
     }
     
+    inline std::vector<std::string> tokenize_copy(std::string_view command) {
+        std::vector<std::string> token_copy {};
+        token_copy.reserve(heuristic_command_token_count);
+
+        for (std::string_view view : tokenize_view(command)) {
+            token_copy.emplace_back(view);
+        }
+
+        return token_copy;
+    }
 }   // namespace PitchQuest::cli
 
 #endif  // PITCHQUEST_CLI_HPP_
