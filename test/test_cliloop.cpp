@@ -1,15 +1,17 @@
 #include <gtest/gtest.h>
 
+#include <sstream>
+
 #include "cliloop.hpp"
 
 TEST(CliLoopTest, NewCliLoopIsEmpty) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
 
     EXPECT_EQ(cli.count_commands(), 0);
 }
 
 TEST(CliLoopTest, RegisterUniqueCommands) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
     cli.register_command("do_nothing", [] (std::span<std::string_view>) { return true; });
 
     EXPECT_EQ(cli.count_commands(), 1);
@@ -22,7 +24,7 @@ TEST(CliLoopTest, RegisterUniqueCommands) {
 }
 
 TEST(CliLoopTest, RegisterDuplicateCommands) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
     cli.register_command("do_nothing", [] (std::span<std::string_view>) { return true; });
     cli.register_command("do_nothing", [] (std::span<std::string_view>) { return true; });
 
@@ -31,20 +33,20 @@ TEST(CliLoopTest, RegisterDuplicateCommands) {
 }
 
 TEST(CliLoopTest, FindCommandInEmptyCliLoop) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
 
     EXPECT_EQ(cli.has_command("do_nothing"), false);
 }
 
 TEST(CliLoopTest, FindMissingCommandInCliLoop) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
     cli.register_command("do_nothing", [] (std::span<std::string_view>) { return true; });
 
     EXPECT_EQ(cli.has_command("missing_command"), false);
 }
 
 TEST(CliLoopTest, UnregisterCommandInEmptyCliLoop) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
     cli.unregister_command("missing");
 
     EXPECT_EQ(cli.count_commands(), 0);
@@ -52,7 +54,7 @@ TEST(CliLoopTest, UnregisterCommandInEmptyCliLoop) {
 }
 
 TEST(CliLoopTest, UnregisterExistingCommand) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
     cli.register_command("do_nothing", [] (std::span<std::string_view>) { return true; });
     cli.unregister_command("do_nothing");
 
@@ -61,7 +63,7 @@ TEST(CliLoopTest, UnregisterExistingCommand) {
 }
 
 TEST(CliLoopTest, UnregisterMissingCommand) {
-    PitchQuest::CliLoop cli {};
+    PitchQuest::CliLoop cli {std::cin, false};
     cli.register_command("do_nothing", [] (std::span<std::string_view>) { return true; });
     cli.unregister_command("missing");
 
@@ -71,23 +73,52 @@ TEST(CliLoopTest, UnregisterMissingCommand) {
 }
 
 TEST(CliLoopTest, IsRunning) {
-    PitchQuest::CliLoop cli {};
+    std::istringstream input {};
+    PitchQuest::CliLoop cli {input};
 
     EXPECT_EQ(cli.is_running(), true);
-}
 
-TEST(CliLoopTest, IsRunningAfterStop) {
-    PitchQuest::CliLoop cli {};
     cli.stop();
+    input.str("\n");
+    input.clear();
 
     EXPECT_EQ(cli.is_running(), false);
+}
+
+TEST(CliLoopTest, IsStopped) {
+    std::istringstream input {};
+    PitchQuest::CliLoop cli {input};
+
+    EXPECT_EQ(cli.is_stopped(), false);
+
+    cli.stop();
+    input.str("\n");
+    input.clear();
+
+    cli.wait();
+
+    EXPECT_EQ(cli.is_stopped(), true);
 }
 
 TEST(CliLoopTest, StopAndWait) {
-    PitchQuest::CliLoop cli{};
+    std::istringstream input {};
+    PitchQuest::CliLoop cli {input};
     cli.stop();
+    input.str("\n");
+    input.clear();
     cli.wait();
 
-    EXPECT_EQ(cli.is_running(), false);
-    EXPECT_EQ(cli.is_stopped(), true);
+    SUCCEED();
+}
+
+TEST(CliLoopTest, CanQuitViaCommand) {
+    std::istringstream input {};
+    PitchQuest::CliLoop cli {input};
+    cli.register_command("quit", [&cli] (std::span<std::string_view>) { cli.stop(); return true; });
+
+    input.str("quit\n");
+    input.clear();
+
+    cli.wait();
+    SUCCEED();
 }

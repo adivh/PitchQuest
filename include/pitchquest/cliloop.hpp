@@ -15,15 +15,15 @@ namespace PitchQuest {
 class CliLoop {
     public:
         using CommandFunction = std::function<bool(std::span<std::string_view>)>;
-        explicit CliLoop(std::istream& in = std::cin);
-        ~CliLoop() = default;
+        CliLoop(std::istream& in = std::cin, bool start_running = true);
+        ~CliLoop();
 
-        int count_commands();
-        bool has_command(std::string command);
-        bool is_running();
-        bool is_stopped();
-        void register_command(
-                std::string_view command, CommandFunction function);
+        int count_commands() const;
+        bool has_command(std::string command) const;
+        bool is_running() const;
+        bool is_stopped() const;
+        void register_command(std::string_view command, CommandFunction function);
+        void start();
         void stop();
         void unregister_command(std::string command);
         void wait();
