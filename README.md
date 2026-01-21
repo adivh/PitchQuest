@@ -18,7 +18,8 @@ Integration with Windows is planned
 
 ### CLI
 
-coming soon..
+Can send commands during program execution  
+Can register custom commands in main
 
 ### Logging
 
