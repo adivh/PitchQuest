@@ -11,18 +11,18 @@
 namespace PitchQuest {
 
 Client::Client(PacketHandler& handler)
-    :   m_running{true},
-        m_client_socket{0},
+    :   m_client_socket{0},
         m_server_address{AF_INET, 8080, in_addr{INADDR_ANY}, 0},
         m_handler{handler} {
     m_client_socket = socket(AF_INET, SOCK_STREAM, 0);
     int err = connect(m_client_socket, (struct sockaddr*) &m_server_address, sizeof(m_server_address));
     if (err) {
+        m_running = false;
         log_debug("Error connecting to server: {}", strerror(errno));
-        exit(0);
+    } else {
+        m_running = true;
+        m_worker = std::thread(&Client::recv_loop, this);
     }
-
-    m_worker = std::thread(&Client::recv_loop, this);
 }
 
 Client::~Client() {
