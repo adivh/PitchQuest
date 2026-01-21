@@ -34,9 +34,7 @@ void test_alsa(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 
-    PitchQuest::setup_logger();
-
-    test_alsa(argc, argv);
+    PitchQuest::setup_logger("client.txt");
 
     AlsaAudioPlayer player;
     ClientPacketHandler handler{player};

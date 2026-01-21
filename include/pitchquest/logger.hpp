@@ -5,7 +5,7 @@
 
 namespace PitchQuest {
 
-    void setup_logger();
+    void setup_logger(std::string file_name);
 
     template <typename... Args>
     void log_trace(spdlog::format_string_t<Args...> fmt, Args &&...args) {

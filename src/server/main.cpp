@@ -5,7 +5,7 @@
 #include "server.hpp"
 
 int main() {
-    PitchQuest::setup_logger();
+    PitchQuest::setup_logger("server.txt");
 
     PitchQuest::Server server {};
     std::this_thread::sleep_for(std::chrono::seconds(2));
