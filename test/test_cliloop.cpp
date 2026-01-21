@@ -85,6 +85,17 @@ TEST(CliLoopTest, IsRunning) {
     EXPECT_EQ(cli.is_running(), false);
 }
 
+TEST(CliLoopTest, StopAndWait) {
+    std::istringstream input {};
+    PitchQuest::CliLoop cli {input};
+    cli.stop();
+    input.str("\n");
+    input.clear();
+    cli.wait();
+
+    SUCCEED();
+}
+
 TEST(CliLoopTest, IsStopped) {
     std::istringstream input {};
     PitchQuest::CliLoop cli {input};
@@ -98,17 +109,6 @@ TEST(CliLoopTest, IsStopped) {
     cli.wait();
 
     EXPECT_EQ(cli.is_stopped(), true);
-}
-
-TEST(CliLoopTest, StopAndWait) {
-    std::istringstream input {};
-    PitchQuest::CliLoop cli {input};
-    cli.stop();
-    input.str("\n");
-    input.clear();
-    cli.wait();
-
-    SUCCEED();
 }
 
 TEST(CliLoopTest, CanQuitViaCommand) {
