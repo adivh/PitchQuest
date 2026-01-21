@@ -15,6 +15,8 @@ Server::Server()
         m_server_address{AF_INET, 8080, {INADDR_ANY}, 0},
         m_client_socket{0} {
     m_server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    int enable = 1;
+    setsockopt(m_server_socket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
     int err = bind(m_server_socket, (struct sockaddr*) &m_server_address, sizeof(m_server_address));
 
     if (err) {
@@ -117,6 +119,7 @@ void Server::recv_loop() {
     }
 
     close(m_client_socket);
+    m_client_socket = 0;
     m_stopped_cv.notify_all();
 }
 

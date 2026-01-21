@@ -3,8 +3,11 @@
 #include "alsaaudioplayer.hpp"
 #include "client.hpp"
 #include "clientpackethandler.hpp"
+#include "cliloop.hpp"
 #include "logger.hpp"
 #include "scale.hpp"
+
+#include <iostream>
 
 using namespace PitchQuest;
 
@@ -32,23 +35,28 @@ void test_alsa(int argc, char* argv[]) {
     std::this_thread::sleep_for(std::chrono::seconds(atoi(argv[1])));
 }
 
-int main(int argc, char* argv[]) {
+int main() {
 
     PitchQuest::setup_logger("client.txt");
 
     AlsaAudioPlayer player;
+
     ClientPacketHandler handler{player};
     Client client {handler};
-    client.send("Hello from client!", 19);
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    CliLoop cli {};
+    cli.register_command("connect", [&client] (std::span<std::string_view>) {
+        client.connect();
+        return true;
+    });
+    cli.register_command("quit", [&cli, &client] (std::span<std::string_view>) {
+        client.stop();
+        cli.stop();
+        return true;
+    });
 
-    client.send("Hello again from client!", 24);
-    client.send("Good bye!", 9);
-
-    client.stop();
     client.wait();
+    cli.wait();
 
-    player.wait_for_idle();
     return 0;
 }

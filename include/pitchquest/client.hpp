@@ -15,6 +15,7 @@ class Client {
         explicit Client(PacketHandler& handler);
         ~Client();
 
+        void connect();
         void send(const char* msg, size_t len);
         void stop();
         void wait();
